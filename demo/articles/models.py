@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
+
 from heatindex.fields import HeatIndexField
 
 
@@ -6,6 +8,7 @@ from heatindex.fields import HeatIndexField
 #     return obj.upvotes - obj.downvotes
 
 
+@python_2_unicode_compatible
 class Article(models.Model):
     title = models.CharField(max_length=100)
     upvotes = models.IntegerField(default=0)
@@ -20,5 +23,5 @@ class Article(models.Model):
     class Meta:
         ordering = ('-heat',)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title

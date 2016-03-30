@@ -3,13 +3,16 @@ from datetime import datetime, time
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.utils import timezone
-import math
+
+from heatindex.utils import calculate_heat
 
 DEFAULT_DECAY_TIME = 86400
 DEFAULT_SCORE_BASE = 10
 
 
 class HeatIndexField(models.FloatField):
+    description = "An index of relative heat based on a score and time"
+
     def __init__(self, score_field, timestamp_field=None, decay_time=DEFAULT_DECAY_TIME, score_base=DEFAULT_SCORE_BASE,
                  *args, **kwargs):
         self.score_field = score_field
@@ -51,10 +54,6 @@ class HeatIndexField(models.FloatField):
     def get_timestamp(self, model_instance, add):
         return self.get_field_or_callable(self.timestamp_field, model_instance, add)
 
-    def calculate_heat(self, score, seconds):
-        """ The secret sauce """
-        return seconds + math.copysign(1, score) * math.log(max(abs(score), 1), self.score_base) * self.decay_time
-
     def pre_save(self, model_instance, add):
         timestamp = self.get_timestamp(model_instance, add)
         score = self.get_score(model_instance, add)
@@ -67,7 +66,7 @@ class HeatIndexField(models.FloatField):
             except AttributeError:
                 # Must not be python>=2.7
                 seconds = time.mktime(timestamp.timetuple())
-        value = self.calculate_heat(score, seconds)
+        value = calculate_heat(score, seconds, self.score_base, self.decay_time)
         setattr(model_instance, self.attname, value)
         return super(HeatIndexField, self).pre_save(model_instance, add)
 

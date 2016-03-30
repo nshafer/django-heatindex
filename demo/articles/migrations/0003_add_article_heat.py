@@ -19,7 +19,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='article',
             name='heat',
-            field=heatindex.fields.HeatIndexField(default=1, score_field=(b'upvotes', b'downvotes'), timestamp_field=b'posted', db_index=True),
-            preserve_default=True,
+            field=heatindex.fields.HeatIndexField(default=1, score_field=('upvotes', 'downvotes'), timestamp_field='posted', db_index=True),
         ),
     ]

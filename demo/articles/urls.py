@@ -1,6 +1,7 @@
-from django.conf.urls import patterns, include, url
-import views
+from django.conf.urls import include, url
 
-urlpatterns = patterns('',
-    url(r'^$', views.ArticleList.as_view(), name="article_list"),
-)
+from .views import ArticleList
+
+urlpatterns = [
+    url(r'^$', ArticleList.as_view(), name="article_list"),
+]

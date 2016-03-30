@@ -43,6 +43,13 @@
             {% if paginator.num_pages > 10 %}
                 <li class="disabled"><span>...</span></li>
             {% endif %}
+            {% if paginator.num_pages > 12 %}
+                {% for page in paginator.page_range|slice:"-2:" %}
+                    <li class="{% if page == page_obj.number %}active{% endif %}">
+                        <a href="{% url "article_list" %}?page={{ page }}">{{ page }}</a>
+                    </li>
+                {% endfor %}
+            {% endif %}
             {% if page_obj.has_next %}
                 <li><a href="{% url "article_list" %}?page={{ page_obj.next_page_number }}">&raquo;</a></li>
             {% else %}

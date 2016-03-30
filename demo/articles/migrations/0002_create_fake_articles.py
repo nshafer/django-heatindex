@@ -92,7 +92,6 @@ WORDLIST = (
 
 
 def create_fake_title(i):
-    global WORDLIST
     words = []
     for j in range(1, random.randrange(4, 8)):
         words.append(WORDLIST[random.randint(0, len(WORDLIST)-1)])

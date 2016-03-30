@@ -12,7 +12,7 @@ def null_function(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('articles', '0003_article_heat_column'),
+        ('articles', '0003_add_article_heat'),
     ]
 
     operations = [
